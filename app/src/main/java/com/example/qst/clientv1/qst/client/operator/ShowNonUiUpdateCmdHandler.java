@@ -13,13 +13,16 @@ import com.example.qst.clientv1.qst.client.view.NetFileListAdapter;
 
 import java.util.ArrayList;
 
-public class ShowRemoteFileHandler extends Handler {
+/**
+ * author: 钱苏涛
+ * created on: 2019/3/2 15:01
+ * description:
+ */
+public class ShowNonUiUpdateCmdHandler extends Handler {
     private Context context;
-    private ListView listView;
-    public ShowRemoteFileHandler(Context context, ListView listView) {
+    public ShowNonUiUpdateCmdHandler(Context context) {
         super();
         this.context = context;
-        this.listView = listView;
     }
 
     @Override
@@ -27,25 +30,16 @@ public class ShowRemoteFileHandler extends Handler {
         super.handleMessage(msg);
         Bundle bundle =msg.getData();
         ArrayList<String> list =bundle.getStringArrayList(CmdClientSocket.KEY_SERVER_ACK_MSG);
-        ArrayList<NetFileData> filelist=new ArrayList<NetFileData>();
+        //ArrayList<NetFileData> filelist=new ArrayList<NetFileData>();
         int status=msg.arg2;
         if(status==CmdClientSocket.SERVER_MSG_OK)
         {
-            String path=list.get(1);//文件路径
-            for(int i=2;i<list.size();i++)
-            {
-                NetFileData fileData=new NetFileData(list.get(i),path);
-                filelist.add(fileData);
-            }
-            NetFileListAdapter netFileListAdapter=new NetFileListAdapter(context,filelist);
-            //更新listview
-            listView.setAdapter(netFileListAdapter);
+
         }
         else
         {
             Toast.makeText(context,list.toString(),Toast.LENGTH_SHORT).show();
         }
-
 
     }
 }
