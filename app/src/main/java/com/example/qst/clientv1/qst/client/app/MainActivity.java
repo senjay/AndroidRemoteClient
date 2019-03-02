@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         hidearea=findViewById(R.id.hidearea);
         Button submitbt=findViewById(R.id.submit);
         recyclerView=findViewById(R.id.recyclerview);
-        srfhandler=new ShowRemoteFileHandler(MainActivity.this,listView);
+        srfhandler=new ShowRemoteFileHandler(MainActivity.this,listView,recyclerView);
 
         //隐藏输入区域
 
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         //处理根目录，列出所有盘符
                         filePath="...";
                     }
-                    ShowRemoteFileHandler showRemoteFileHandler = new ShowRemoteFileHandler(MainActivity.this, listView);//会更新ListView的句柄
+                    ShowRemoteFileHandler showRemoteFileHandler = new ShowRemoteFileHandler(MainActivity.this, listView,recyclerView);//会更新ListView的句柄
                     CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port,showRemoteFileHandler);
                     cmdClientSocket.work("dir:"+filePath);
 

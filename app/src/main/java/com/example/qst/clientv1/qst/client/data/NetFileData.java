@@ -6,7 +6,7 @@ public class NetFileData {
     private String filePath = ".\\";// 该文件对象所处的目录，默认值为当前相对目录
     private String fileSizeStr = "0";// 文件的大小，用字符串表示，能智能地选择B、KB、MB、GB来表达
     private String fileModifiedDate = "1970-01-01 00:00:00";// 文件最近修改日期，默认值为1970年基准时间
-    private int fileType = 0;// fileType=0为文件，fileType=1为普通文件夹，fileType=2为盘符
+    private int fileType = 0;// fileType=0为文件，fileType=1为普通文件夹，fileType=2为盘符,fileType=3为"..."或".."
     public NetFileData(String fileInfo, String filePath){
         String [] info=fileInfo.split(">");
         this.fileName=info[0];
@@ -15,6 +15,17 @@ public class NetFileData {
         this.fileType=Integer.parseInt(info[3]);
         this.filePath=filePath;
         dealSize();
+    }
+    //构造两个三个点返回盘符
+    public NetFileData() {
+        this.fileName="...";
+        this.fileType=3;
+    }
+    //构造两个点返回上一级
+    public NetFileData(String filePath) {
+        this.fileName="..";
+        this.fileType=3;
+        this.filePath=filePath+"..";
     }
 
     private void dealSize()
