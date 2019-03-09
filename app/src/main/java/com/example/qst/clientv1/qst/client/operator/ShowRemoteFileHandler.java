@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.ListView;
-import android.widget.Toast;
 
+
+import com.example.qst.clientv1.qst.client.data.AppValues;
 import com.example.qst.clientv1.qst.client.data.NetFileData;
 import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
 import com.example.qst.clientv1.qst.client.view.FilePathAdapter;
@@ -50,17 +52,30 @@ public class ShowRemoteFileHandler extends Handler {
                 @Override
                 public void OnClick(String filePath) {
                     ShowRemoteFileHandler showRemoteFileHandler = new ShowRemoteFileHandler(context, listView,recyclerView);//会更新ListView的句柄
-                    CmdClientSocket cmdClientSocket = new CmdClientSocket("192.168.204.1", 8019,showRemoteFileHandler);
+                    AppValues appValues=(AppValues)context.getApplicationContext();
+                    CmdClientSocket cmdClientSocket = new CmdClientSocket(appValues.getIp(), appValues.getPort(),showRemoteFileHandler);
                     cmdClientSocket.work("dir:"+filePath);
+
+
                 }
             });
+            //自动滑动到最右边
+           // recyclerView.smoothScrollToPosition(filePathAdapter.getItemCount()-1); 此法不起作用
+            recyclerView.scrollToPosition(filePathAdapter.getItemCount()-1);
             //更新listview
             NetFileListAdapter netFileListAdapter=new NetFileListAdapter(context,filelist);
             listView.setAdapter(netFileListAdapter);
         }
         else
         {
-            Toast.makeText(context,list.toString(),Toast.LENGTH_SHORT).show();
+            //给Noui传递消息
+            ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler = new ShowNonUiUpdateCmdHandler(context);
+            Message message = showNonUiUpdateCmdHandler.obtainMessage();
+            Bundle bundle2 = new Bundle();
+            message.arg2=status;
+            bundle.putStringArrayList(CmdClientSocket.KEY_SERVER_ACK_MSG,list);
+            message.setData(bundle);
+            showNonUiUpdateCmdHandler.sendMessage(message);
         }
 
 

@@ -1,10 +1,12 @@
 package com.example.qst.clientv1.qst.client.app;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,10 +19,14 @@ import android.widget.TextView;
 
 import com.example.qst.clientv1.R;
 import com.example.qst.clientv1.SocketClient;
+import com.example.qst.clientv1.qst.client.data.AppValues;
+import com.example.qst.clientv1.qst.client.data.HotKeyData;
 import com.example.qst.clientv1.qst.client.data.NetFileData;
+import com.example.qst.clientv1.qst.client.operator.HotKeyGenerator;
 import com.example.qst.clientv1.qst.client.operator.ShowNonUiUpdateCmdHandler;
 import com.example.qst.clientv1.qst.client.operator.ShowRemoteFileHandler;
 import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
+import com.example.qst.clientv1.qst.client.view.HotKeyDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_layout);
 
         listView=findViewById(R.id.filelist);
+        registerForContextMenu(listView);//注册上下文菜单
         Button hidebt=findViewById(R.id.hide);
         hidearea=findViewById(R.id.hidearea);
         Button submitbt=findViewById(R.id.submit);
@@ -65,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
                 EditText et_cmd=findViewById(R.id.edit_cmd);
                 ip=et_ip.getText().toString().trim();
                 port=Integer.parseInt(et_port.getText().toString());
+
+                AppValues  appValues=(AppValues)getApplication();
+                appValues.setIp(ip);
+                appValues.setPort(port);
+
                 String cmd=et_cmd.getText().toString().trim();
                 CmdClientSocket cmdClient=new CmdClientSocket(ip,port,srfhandler);
                 cmdClient.work(cmd);
@@ -123,5 +135,32 @@ public class MainActivity extends AppCompatActivity {
               hidearea.setVisibility(View.VISIBLE);
         }
         return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getMenuInflater().inflate(R.menu.file_list_context_menu, menu);
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo contextMenuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int pos=contextMenuInfo.position;
+        NetFileData netFileData=(NetFileData) listView.getAdapter().getItem(pos);//其中listView为显示文件列表的视图
+        switch(item.getItemId()){
+            case R.id.HotKeyDialog:// 弹出热键对话框
+                showHotKeyDialog(netFileData);//能根据netFileData类型决定弹出相应的热键对话框
+                break;
+            default :break;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    private void showHotKeyDialog(NetFileData netFileData) {
+        ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler = new ShowNonUiUpdateCmdHandler(MainActivity.this);
+        CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port,showNonUiUpdateCmdHandler);
+        new HotKeyDialog(MainActivity.this,HotKeyGenerator.getHotkeyList(netFileData) , "热键操作表", cmdClientSocket).show();
+
     }
 }

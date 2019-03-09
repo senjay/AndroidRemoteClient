@@ -25,7 +25,7 @@ public class NetFileData {
     public NetFileData(String filePath) {
         this.fileName="..";
         this.fileType=3;
-        this.filePath=filePath+"..";
+        this.filePath=filePath;
     }
 
     private void dealSize()

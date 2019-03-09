@@ -3,6 +3,7 @@ package com.example.qst.clientv1.qst.client.socket;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -55,6 +56,7 @@ public class CmdClientSocket {
             String s = bufferedReader.readLine();
             msgList.add(s);
         }
+        Log.d("tests",msgList.toString());
         return msgList;
     }
     private void close() throws IOException {

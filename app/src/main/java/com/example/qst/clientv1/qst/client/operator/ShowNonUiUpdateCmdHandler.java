@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -30,14 +31,16 @@ public class ShowNonUiUpdateCmdHandler extends Handler {
         super.handleMessage(msg);
         Bundle bundle =msg.getData();
         ArrayList<String> list =bundle.getStringArrayList(CmdClientSocket.KEY_SERVER_ACK_MSG);
-        //ArrayList<NetFileData> filelist=new ArrayList<NetFileData>();
+
         int status=msg.arg2;
+
         if(status==CmdClientSocket.SERVER_MSG_OK)
         {
-           // Toast.makeText(context,list.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,list.get(1).toString(),Toast.LENGTH_SHORT).show();
         }
         else
         {
+
             Toast.makeText(context,list.toString(),Toast.LENGTH_SHORT).show();
         }
 
