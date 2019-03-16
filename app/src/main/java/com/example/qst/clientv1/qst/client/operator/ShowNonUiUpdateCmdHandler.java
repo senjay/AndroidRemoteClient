@@ -36,6 +36,7 @@ public class ShowNonUiUpdateCmdHandler extends Handler {
 
         if(status==CmdClientSocket.SERVER_MSG_OK)
         {
+            if (list.size()>1)
             Toast.makeText(context,list.get(1).toString(),Toast.LENGTH_SHORT).show();
         }
         else

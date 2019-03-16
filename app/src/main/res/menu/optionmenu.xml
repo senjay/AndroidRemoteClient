@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/showarea"
+        android:id="@+id/menu_showarea"
         android:title="Show Input Area" />
+    <item
+        android:id="@+id/menu_mouse_pad"
+        android:title="Mouse Pad" />
 </menu>

@@ -1,6 +1,7 @@
 package com.example.qst.clientv1.qst.client.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 EditText et_cmd=findViewById(R.id.edit_cmd);
                 ip=et_ip.getText().toString().trim();
                 port=Integer.parseInt(et_port.getText().toString());
-
+                //存入application类
                 AppValues  appValues=(AppValues)getApplication();
                 appValues.setIp(ip);
                 appValues.setPort(port);
@@ -131,8 +132,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId())
         {
-            case R.id.showarea:
+            case R.id.menu_showarea:
               hidearea.setVisibility(View.VISIBLE);
+            case R.id.menu_mouse_pad:
+
+                Intent intent = new Intent(MainActivity.this,MousePadActivity.class);
+                startActivity(intent);
+//                getSupportFragmentManager().beginTransaction()
+//                    .replace(R.id.fragment,new MousePadFragment(MainActivity.this ))
+//                    .addToBackStack(null)
+//                    .commit();
         }
         return true;
     }
@@ -161,6 +170,5 @@ public class MainActivity extends AppCompatActivity {
         ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler = new ShowNonUiUpdateCmdHandler(MainActivity.this);
         CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port,showNonUiUpdateCmdHandler);
         new HotKeyDialog(MainActivity.this,HotKeyGenerator.getHotkeyList(netFileData) , "热键操作表", cmdClientSocket).show();
-
     }
 }

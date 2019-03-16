@@ -11,7 +11,12 @@ public class AppValues extends Application {
     private  String ip;
     private  int port;
 
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        ip="192.168.137.1";
+        port=8019;
+    }
 
     public String getIp() {
         return ip;
