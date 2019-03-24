@@ -40,18 +40,12 @@ public class MousePadFragment extends Fragment {
     int port;
     private GestureDetector mGestureDetector;
     GestureDetector rolgestureDetector;
-    Context context;
-
-    @SuppressLint("ValidFragment")
-    public MousePadFragment(Context context) {
-        this.context = context;
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.layout_mouse_pad, container, false);
-        AppValues appValues=(AppValues)context.getApplicationContext();
+        AppValues appValues=(AppValues)getContext().getApplicationContext();
+                //(AppValues)context.getApplicationContext();
         ip=appValues.getIp();
         port=appValues.getPort();
         mousepad=view.findViewById(R.id.mouse_pad);
@@ -59,9 +53,9 @@ public class MousePadFragment extends Fragment {
         mouseright=view.findViewById(R.id.mouse_right);
         mouselock=view.findViewById(R.id.mouse_lock);
         mousewheel=view.findViewById(R.id.mouse_wheel);
-        mGestureDetector=new GestureDetector(context, new MousePadOnGestureListener(context));
+        mGestureDetector=new GestureDetector(getContext(), new MousePadOnGestureListener(getContext()));
         //这里rolgestureDetector 不能每次new新的出来调用
-        rolgestureDetector=new GestureDetector(context, new GestureDetector.SimpleOnGestureListener(){
+        rolgestureDetector=new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener(){
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
                 String cmd="rol:";
@@ -73,7 +67,7 @@ public class MousePadFragment extends Fragment {
                 else {
                     cmd+="1";
                 }
-                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(context);
+                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(getContext());
                 CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port, showNonUiUpdateCmdHandler);
                 cmdClientSocket.work(cmd);
                 return true;
@@ -92,7 +86,7 @@ public class MousePadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String cmd="clk:left";
-                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(context);
+                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(getContext());
                 CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port, showNonUiUpdateCmdHandler);
                 cmdClientSocket.work(cmd);
             }
@@ -102,7 +96,7 @@ public class MousePadFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String cmd="clk:right";
-                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(context);
+                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(getContext());
                 CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port, showNonUiUpdateCmdHandler);
                 cmdClientSocket.work(cmd);
             }
@@ -112,13 +106,13 @@ public class MousePadFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
                     String cmd="clk:left_press";
-                    ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(context);
+                    ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(getContext());
                     CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port, showNonUiUpdateCmdHandler);
                     cmdClientSocket.work(cmd);
                 }
                 else {
                     String cmd="clk:left_release";
-                    ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(context);
+                    ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler=new ShowNonUiUpdateCmdHandler(getContext());
                     CmdClientSocket cmdClientSocket = new CmdClientSocket(ip, port, showNonUiUpdateCmdHandler);
                     cmdClientSocket.work(cmd);
                 }

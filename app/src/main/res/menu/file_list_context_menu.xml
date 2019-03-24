@@ -4,4 +4,7 @@
     <item
         android:id="@+id/HotKeyDialog"
         android:title="弹出热键框" />
+    <item
+        android:id="@+id/downloadfile"
+        android:title="下载" />
 </menu>

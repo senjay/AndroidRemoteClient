@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/bt_ip_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="IP设置" />
+
+    <Button
+        android:id="@+id/bt_mouse_pad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="鼠标触摸" />
+
+    <Button
+        android:id="@+id/bt_remote_computer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="远程电脑文件" />
+
+    <Button
+        android:id="@+id/bt_remote_cmd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="命令控制" />
+</LinearLayout>

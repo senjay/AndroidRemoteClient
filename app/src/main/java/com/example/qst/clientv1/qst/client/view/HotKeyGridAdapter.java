@@ -3,7 +3,6 @@ package com.example.qst.clientv1.qst.client.view;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.qst.clientv1.R;
-import com.example.qst.clientv1.qst.client.app.MainActivity;
 import com.example.qst.clientv1.qst.client.data.HotKeyData;
-import com.example.qst.clientv1.qst.client.operator.ShowNonUiUpdateCmdHandler;
 import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
 
 import java.util.List;

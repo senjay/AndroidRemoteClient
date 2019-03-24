@@ -39,12 +39,21 @@ public class CmdClientSocket {
         socket.connect(address,time_out);
 
     }
-    private void writeCmd(String cmd) throws IOException {
+    private void writeCmd(String ...cmd) throws IOException {
         BufferedOutputStream os=new BufferedOutputStream(socket.getOutputStream());
         writer=new OutputStreamWriter(os,"UTF-8");
-        writer.write("1\n");
-        writer.write(cmd+"\n");
+        //if (cmd.length==)
+        writer.write(cmd.length+"\n");
+
+
         writer.flush();
+        for (int i=0;i<cmd.length;i++)
+        {
+            writer.write(cmd[i].trim()+"\n");
+            writer.flush();
+        }
+//        writer.write(cmd+"\n");
+//        writer.flush();android
     }
     private ArrayList<String> readSocketMsg() throws IOException {
         ArrayList<String> msgList=new ArrayList<>();
@@ -64,7 +73,7 @@ public class CmdClientSocket {
         writer.close();
         socket.close();
     }
-    private void doCmdTask(String cmd){
+    private void doCmdTask(String... cmd){
         ArrayList<String> msgList=new ArrayList<>();
         try {
             connect();
@@ -88,7 +97,7 @@ public class CmdClientSocket {
         handler.sendMessage(message);
 
     }
-    public void work(final String cmd){
+    public void work(final String... cmd){
         new Thread(new Runnable() {
             @Override
             public void run() {
