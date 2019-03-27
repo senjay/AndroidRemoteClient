@@ -31,9 +31,7 @@ public class ShowNonUiUpdateCmdHandler extends Handler {
         super.handleMessage(msg);
         Bundle bundle =msg.getData();
         ArrayList<String> list =bundle.getStringArrayList(CmdClientSocket.KEY_SERVER_ACK_MSG);
-
         int status=msg.arg2;
-
         if(status==CmdClientSocket.SERVER_MSG_OK)
         {
             if (list.size()>1)
@@ -46,4 +44,5 @@ public class ShowNonUiUpdateCmdHandler extends Handler {
         }
 
     }
+
 }

@@ -1,17 +1,29 @@
 package com.example.qst.clientv1.qst.client.app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.qst.clientv1.R;
+import com.example.qst.clientv1.qst.client.data.AppValues;
+import com.example.qst.clientv1.qst.client.operator.FileTransferBeginHandler;
+import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import static java.security.AccessController.getContext;
 
 /**
  * author: 钱苏涛
@@ -30,7 +42,6 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_fragment);
 
-
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
         ipsettingFragment=new IpsettingFragment();
         fragmentList.add(ipsettingFragment);
@@ -40,12 +51,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         initSlidingMenus();
     }
 
-    private void ViewListener() {
-        slidingMenu.findViewById(R.id.bt_mouse_pad).setOnClickListener(this);
-        slidingMenu.findViewById(R.id.bt_remote_computer).setOnClickListener(this);
-        slidingMenu.findViewById(R.id.bt_ip_setting).setOnClickListener(this);
-        slidingMenu.findViewById(R.id.bt_remote_cmd).setOnClickListener(this);
-    }
+
     @Override
     public void onClick(View v) {
         FragmentTransaction transaction=getSupportFragmentManager().beginTransaction();
@@ -96,6 +102,30 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 transaction.commit();
                 slidingMenu.toggle();
                 break;
+            case R.id.bt_file_upload:
+                Intent intent =new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("file/*");
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent,0);
+                break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK)
+        {
+            Uri uri=data.getData();
+            String path=uri.getPath();
+            String filename=path.substring(path.lastIndexOf("/")+1);
+            Toast.makeText(this,filename,Toast.LENGTH_SHORT).show();
+            AppValues appValues=(AppValues)getApplication();
+            String ip=appValues.getIp();
+            int port=appValues.getPort();
+            path=path.replace("/external_files", Environment.getExternalStorageDirectory().getAbsolutePath());//变换一下路径
+            FileTransferBeginHandler fileTransferBeginHandler=new FileTransferBeginHandler(FirstActivity.this,path);
+            new CmdClientSocket(ip,port,fileTransferBeginHandler).work("ulf:"+"G:\\android_server_download\\"+filename+"?"+1);
         }
     }
 
@@ -134,5 +164,13 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
         });
         //各种点击事件
         ViewListener();
+    }
+
+    private void ViewListener() {
+        slidingMenu.findViewById(R.id.bt_mouse_pad).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.bt_remote_computer).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.bt_ip_setting).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.bt_remote_cmd).setOnClickListener(this);
+        slidingMenu.findViewById(R.id.bt_file_upload).setOnClickListener(this);
     }
 }

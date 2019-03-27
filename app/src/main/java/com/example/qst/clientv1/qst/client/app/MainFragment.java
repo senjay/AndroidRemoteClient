@@ -1,6 +1,5 @@
 package com.example.qst.clientv1.qst.client.app;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -9,19 +8,19 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.qst.clientv1.R;
 import com.example.qst.clientv1.qst.client.data.AppValues;
 import com.example.qst.clientv1.qst.client.data.NetFileData;
+import com.example.qst.clientv1.qst.client.operator.CheckLocalDownloadFolder;
+import com.example.qst.clientv1.qst.client.operator.FileTransferBeginHandler;
 import com.example.qst.clientv1.qst.client.operator.HotKeyGenerator;
 import com.example.qst.clientv1.qst.client.operator.ShowNonUiUpdateCmdHandler;
 import com.example.qst.clientv1.qst.client.operator.ShowRemoteFileHandler;
@@ -127,33 +126,7 @@ public class MainFragment extends Fragment {
         });
         return  view;
     }
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        new MenuInflater(getContext()).inflate(R.menu.optionmenu,menu);
-//        return true;
-//    }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//        new MenuInflater(getContext()).inflate(R.menu.optionmenu,menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId())
-//        {
-//            case R.id.menu_showarea:
-//                hidearea.setVisibility(View.VISIBLE);
-//                break;
-//            case R.id.menu_mouse_pad:
-//                Intent intent = new Intent(getContext(),MousePadActivity.class);
-//                startActivity(intent);
-//                break;
-//
-//        }
-//        return true;
-//    }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
@@ -171,6 +144,23 @@ public class MainFragment extends Fragment {
                 showHotKeyDialog(netFileData);//能根据netFileData类型决定弹出相应的热键对话框
                 break;
             case R.id.downloadfile:
+                //发送文件下载命令
+                /**
+                 * 1.检验本地是否存在该文件
+                 * 2.若存在通过命令socket发送文件路径+本地该文件长度，否则发送发送文件路径+长度0
+                 * 3.服务器接受命令，跳过skip客户端发送来的长度,发送文件byte，文件下载socket端口给客户端（服务器开辟新线程）
+                 * 4.客户端通过FileTransferBeginHandler接受到端口号，若是本地该文件存在则追加写入，否则创建文件写入（客户端开辟新线程FileDownLoadSocketThread）
+                 */
+                if(netFileData.getFileType()==0)
+                {
+                    long filepos=CheckLocalDownloadFolder.isFileExists(netFileData.getFileName());
+                    FileTransferBeginHandler fileTransferBeginHandler=new FileTransferBeginHandler(getContext(),netFileData.getFileName());
+                    new CmdClientSocket(ip,port,fileTransferBeginHandler).work("dlf:"+netFileData.getFilePath()+"\\"+netFileData.getFileName()+"?"+filepos);
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"暂未实现整个文件夹下载功能",Toast.LENGTH_SHORT).show();
+                }
                 break;
             default :break;
         }

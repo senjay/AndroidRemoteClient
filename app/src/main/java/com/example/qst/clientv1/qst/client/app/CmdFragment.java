@@ -45,6 +45,7 @@ public class CmdFragment extends Fragment {
                 String cmd=et_cmd.getText().toString().trim();
                 String []cmdlist=cmd.split("\n");
                 cmdClient.work(cmdlist);
+
             }
         });
         return view;
