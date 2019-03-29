@@ -34,7 +34,7 @@ import java.io.File;
  * created on: 2019/3/23 13:09
  * description:
  */
-public class MainFragment extends Fragment {
+public class RemoteFragment extends Fragment {
     Handler handler;
     String ip;
     int port;

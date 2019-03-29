@@ -13,9 +13,28 @@
         android:text="for:5\ncmd:start www.iqiyi.com\nslp:4000\ncps:android"
         />
 
-    <Button
-        android:id="@+id/submit_cmd"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="提交" />
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/submit_cmd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="提交" />
+
+        <Button
+            android:id="@+id/cmd_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="保存" />
+    </LinearLayout>
+
+    <com.baoyz.swipemenulistview.SwipeMenuListView
+        android:id="@+id/cmd_listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

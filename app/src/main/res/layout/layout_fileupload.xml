@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/bt_selectfile_upload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择文件" />
+
+    <Switch
+        android:id="@+id/switch_upload_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textOn="开"
+        android:textOff="关"
+        android:checked="true"
+        android:text="续传模式" />
+</LinearLayout>

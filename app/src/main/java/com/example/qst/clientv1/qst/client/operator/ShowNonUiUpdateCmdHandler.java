@@ -39,7 +39,6 @@ public class ShowNonUiUpdateCmdHandler extends Handler {
         }
         else
         {
-
             Toast.makeText(context,list.toString(),Toast.LENGTH_SHORT).show();
         }
 

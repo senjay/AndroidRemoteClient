@@ -8,9 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.qst.clientv1.R;
@@ -19,11 +17,7 @@ import com.example.qst.clientv1.qst.client.operator.FileTransferBeginHandler;
 import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-
-import static java.security.AccessController.getContext;
 
 /**
  * author: 钱苏涛
@@ -34,9 +28,10 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
     SlidingMenu slidingMenu;
     ArrayList<Fragment>fragmentList=new ArrayList<Fragment>();
     MousePadFragment mousepad;
-    MainFragment remote;
+    RemoteFragment remote;
     IpsettingFragment ipsettingFragment;
     CmdFragment cmdFragment;
+    FileUploadFragment fileUploadFragment;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +66,7 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.bt_remote_computer:
                 if(remote==null) {//remoteSys为全局变量，Fragment remoteSys;定义
-                    remote = new MainFragment();
+                    remote = new RemoteFragment();
                     fragmentList.add(remote);//fragmentList为全局变量，通过ArrayList<Fragment> fragmentList;
                     transaction.add(R.id.fragment,remote);
                 }
@@ -103,29 +98,15 @@ public class FirstActivity extends AppCompatActivity implements View.OnClickList
                 slidingMenu.toggle();
                 break;
             case R.id.bt_file_upload:
-                Intent intent =new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("file/*");
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                startActivityForResult(intent,0);
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==RESULT_OK)
-        {
-            Uri uri=data.getData();
-            String path=uri.getPath();
-            String filename=path.substring(path.lastIndexOf("/")+1);
-            Toast.makeText(this,filename,Toast.LENGTH_SHORT).show();
-            AppValues appValues=(AppValues)getApplication();
-            String ip=appValues.getIp();
-            int port=appValues.getPort();
-            path=path.replace("/external_files", Environment.getExternalStorageDirectory().getAbsolutePath());//变换一下路径
-            FileTransferBeginHandler fileTransferBeginHandler=new FileTransferBeginHandler(FirstActivity.this,path);
-            new CmdClientSocket(ip,port,fileTransferBeginHandler).work("ulf:"+"G:\\android_server_download\\"+filename+"?"+1);
+                    if(fileUploadFragment==null) {//remoteSys为全局变量，Fragment remoteSys;定义
+                        fileUploadFragment = new FileUploadFragment();
+                        fragmentList.add(fileUploadFragment);//fragmentList为全局变量，通过ArrayList<Fragment> fragmentList;
+                        transaction.add(R.id.fragment,fileUploadFragment);
+                    }
+                    hideAllFragments(transaction);
+                    transaction.show(fileUploadFragment);
+                    transaction.commit();
+                    slidingMenu.toggle();
         }
     }
 

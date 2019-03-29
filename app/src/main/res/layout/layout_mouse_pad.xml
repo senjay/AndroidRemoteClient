@@ -6,9 +6,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="1">
+        android:layout_weight="5">
 
         <TextView
             android:id="@+id/mouse_pad"
@@ -27,9 +27,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_weight="2">
+        android:layout_weight="1">
 
         <Button
             android:id="@+id/mouse_left"
@@ -52,6 +52,33 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Right" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/pad_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/pad_input_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="确定输入" />
+
+        <Button
+            android:id="@+id/back_space"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="退格键" />
     </LinearLayout>
 
 </LinearLayout>

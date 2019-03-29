@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -22,6 +23,7 @@ import com.example.qst.clientv1.qst.client.data.AppValues;
 import com.example.qst.clientv1.qst.client.listen.MousePadOnGestureListener;
 import com.example.qst.clientv1.qst.client.operator.ShowNonUiUpdateCmdHandler;
 import com.example.qst.clientv1.qst.client.socket.CmdClientSocket;
+import com.example.qst.clientv1.qst.client.sql.CmddataBase;
 
 /**
  * author: 钱苏涛
@@ -36,6 +38,10 @@ public class MousePadFragment extends Fragment {
     Button mouseleft;
     Button mouseright;
     ToggleButton mouselock;
+    Button bt_input;
+    EditText et_input;
+    Button bt_back;
+
     String ip;
     int port;
     private GestureDetector mGestureDetector;
@@ -53,6 +59,9 @@ public class MousePadFragment extends Fragment {
         mouseright=view.findViewById(R.id.mouse_right);
         mouselock=view.findViewById(R.id.mouse_lock);
         mousewheel=view.findViewById(R.id.mouse_wheel);
+        bt_input=view.findViewById(R.id.pad_input_submit);
+        et_input=view.findViewById(R.id.pad_input);
+        bt_back=view.findViewById(R.id.back_space);
         mGestureDetector=new GestureDetector(getContext(), new MousePadOnGestureListener(getContext()));
         //这里rolgestureDetector 不能每次new新的出来调用
         rolgestureDetector=new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener(){
@@ -126,6 +135,29 @@ public class MousePadFragment extends Fragment {
                 return true;
             }
         });
+        bt_input.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String inputstring=et_input.getText().toString();
+                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler = new ShowNonUiUpdateCmdHandler(getContext());
+                CmdClientSocket cmdClient = new CmdClientSocket(ip, port,showNonUiUpdateCmdHandler);
+                cmdClient.work("cps:"+inputstring);
+            }
+        });
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowNonUiUpdateCmdHandler showNonUiUpdateCmdHandler = new ShowNonUiUpdateCmdHandler(getContext());
+                CmdClientSocket cmdClient = new CmdClientSocket(ip, port,showNonUiUpdateCmdHandler);
+                cmdClient.work("key:vk_back_space");
+            }
+        });
         return  view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mouselock.setChecked(false);
     }
 }

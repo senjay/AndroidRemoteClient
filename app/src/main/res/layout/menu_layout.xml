@@ -8,29 +8,40 @@
         android:id="@+id/bt_ip_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="IP设置" />
+        android:text="IP设置"
+        android:background="@null"
+        android:drawableLeft="@drawable/ip"/>
 
     <Button
         android:id="@+id/bt_mouse_pad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="鼠标触摸" />
+        android:text="鼠标触摸"
+        android:background="@null"
+        android:drawableLeft="@drawable/touch" />
 
     <Button
         android:id="@+id/bt_remote_computer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="远程电脑文件" />
+        android:text="远程电脑文件"
+        android:background="@null"
+        android:drawableLeft="@drawable/remote"
+        />
 
     <Button
         android:id="@+id/bt_remote_cmd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="命令控制" />
+        android:text="命令控制"
+        android:background="@null"
+        android:drawableLeft="@drawable/cmd"/>
 
     <Button
         android:id="@+id/bt_file_upload"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="文件上传" />
+        android:text="文件上传"
+        android:background="@null"
+        android:drawableLeft="@drawable/upload"/>
 </LinearLayout>
